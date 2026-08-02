@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContainerGuard - Autonomous Docker Container Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        
+        .cta-button {
+            background: white;
+            color: #667eea;
+            padding: 10px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .primary-btn {
+            background: white;
+            color: #667eea;
+            padding: 15px 40px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            transition: transform 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .primary-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .secondary-btn {
+            background: transparent;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            border: 2px solid white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .secondary-btn:hover {
+            background: white;
+            color: #667eea;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 80px 20px;
+            background: #f8f9fa;
+        }
+        
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+            font-weight: bold;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+        
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            padding: 80px 20px;
+            background: white;
+        }
+        
+        .pricing-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .pricing-card {
+            border: 2px solid #e0e0e0;
+            padding: 40px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .pricing-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .pricing-card.featured {
+            border-color: #667eea;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .plan-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .plan-price {
+            font-size: 48px;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .plan-period {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .plan-features {
+            text-align: left;
+            margin-bottom: 30px;
+            line-height: 2.5;
+        }
+        
+        .plan-features li {
+            list-style: none;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .plan-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .plan-cta {
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .plan-cta:hover {
+            background: #764ba2;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        
+        .cta-section h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .cta-section p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+        
+        .email-form {
+            display: flex;
+            gap: 10px;
+            max-width: 500px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .email-form input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            min-width: 200px;
+        }
+        
+        .email-form button {
+            background: white;
+            color: #667eea;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .email-form button:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                🛡️ ContainerGuard
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#cta">Get Started</a></li>
+            </ul>
+            <button class="cta-button" onclick="document.getElementById('email').focus()">Start Free Trial</button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>🚀 Autonomous Docker Container Management</h1>
+            <p>Automatically monitor, remediate, and manage your Docker containers 24/7 with zero manual intervention.</p>
+            <div class="hero-buttons">
+                <button class="primary-btn" onclick="document.getElementById('email').focus()">Start Free Trial (14 Days)</button>
+                <button class="secondary-btn" onclick="window.open('https://github.com/muralipala1504/linux-autonomous-agent')">View on GitHub</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <h2 class="section-title">Why Choose ContainerGuard?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Auto-Discovery</h3>
+                    <p>Automatically discover all running Docker containers and monitor their health in real-time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Live Metrics</h3>
+                    <p>Track CPU, memory, disk usage, and health status with instant dashboards and alerts.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Auto-Remediation</h3>
+                    <p>Automatically restart unhealthy containers without manual intervention 24/7.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Full Control</h3>
+                    <p>Stop, start, restart containers via REST API or intuitive web dashboard.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3>Audit Trails</h3>
+                    <p>Complete audit logs of all actions with timestamps and detailed reporting.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>One-Command Deploy</h3>
+                    <p>Deploy in seconds with a single Docker command. No complex setup needed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="pricing-container">
+            <h2 class="section-title">Simple, Transparent Pricing</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="plan-name">Starter</div>
+                    <div class="plan-price">$29</div>
+                    <div class="plan-period">/month</div>
+                    <ul class="plan-features">
+                        <li>Up to 10 containers</li>
+                        <li>Basic metrics</li>
+                        <li>Email support</li>
+                        <li>Web dashboard</li>
+                        <li>Auto-remediation</li>
+                    </ul>
+                    <button class="plan-cta" onclick="document.getElementById('email').focus()">Start Free Trial</button>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <div class="plan-name">Pro</div>
+                    <div class="plan-price">$99</div>
+                    <div class="plan-period">/month</div>
+                    <ul class="plan-features">
+                        <li>Up to 100 containers</li>
+                        <li>Advanced metrics</li>
+                        <li>Priority support</li>
+                        <li>REST API access</li>
+                        <li>Slack integration</li>
+                        <li>Custom alerts</li>
+                    </ul>
+                    <button class="plan-cta" onclick="document.getElementById('email').focus()">Start Free Trial</button>
+                </div>
+                
+                <div class="pricing-card">
+                    <div class="plan-name">Enterprise</div>
+                    <div class="plan-price">$299</div>
+                    <div class="plan-period">/month</div>
+                    <ul class="plan-features">
+                        <li>Unlimited containers</li>
+                        <li>All Pro features</li>
+                        <li>24/7 phone support</li>
+                        <li>Custom integrations</li>
+                        <li>Dedicated account mgr</li>
+                        <li>SLA guarantee</li>
+                    </ul>
+                    <button class="plan-cta" onclick="document.getElementById('email').focus()">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <h2>Ready to Simplify Container Management?</h2>
+        <p>Join hundreds of DevOps engineers using ContainerGuard</p>
+        <form class="email-form" onsubmit="handleSubmit(event)">
+            <input type="email" id="email" placeholder="Enter your email" required>
+            <button type="submit">Get Started</button>
+        </form>
+        <p style="margin-top: 20px; font-size: 14px;">✅ 14-day free trial. No credit card required.</p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 ContainerGuard. All rights reserved.</p>
+        <p>Built for DevOps Engineers | <a href="https://github.com/muralipala1504/linux-autonomous-agent" style="color: #667eea;">Open Source</a></p>
+    </footer>
+
+    <script>
+        function handleSubmit(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            alert(`Thank you! We'll send early access details to ${email}`);
+            // TODO: Connect to backend to save email
+            document.getElementById('email').value = '';
+        }
+    </script>
+</body>
+</html>
