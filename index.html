@@ -312,37 +312,9 @@
             opacity: 0.95;
         }
         
-        .email-form {
-            display: flex;
-            gap: 10px;
-            max-width: 500px;
+        .typeform-container {
+            max-width: 600px;
             margin: 0 auto;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        .email-form input {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            min-width: 200px;
-        }
-        
-        .email-form button {
-            background: white;
-            color: #667eea;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-        
-        .email-form button:hover {
-            transform: translateY(-2px);
         }
         
         /* Footer */
@@ -381,7 +353,7 @@
                 <li><a href="#pricing">Pricing</a></li>
                 <li><a href="#cta">Get Started</a></li>
             </ul>
-            <button class="cta-button" onclick="document.getElementById('email').focus()">Start Free Trial</button>
+            <button class="cta-button" onclick="document.getElementById('typeform-embed').scrollIntoView({behavior: 'smooth'})">Start Free Trial</button>
         </div>
     </header>
 
@@ -391,7 +363,7 @@
             <h1>🚀 Autonomous Docker Container Management</h1>
             <p>Automatically monitor, remediate, and manage your Docker containers 24/7 with zero manual intervention.</p>
             <div class="hero-buttons">
-                <button class="primary-btn" onclick="document.getElementById('email').focus()">Start Free Trial (14 Days)</button>
+                <button class="primary-btn" onclick="document.getElementById('typeform-embed').scrollIntoView({behavior: 'smooth'})">Start Free Trial (14 Days)</button>
                 <button class="secondary-btn" onclick="window.open('https://github.com/muralipala1504/linux-autonomous-agent')">View on GitHub</button>
             </div>
         </div>
@@ -452,7 +424,7 @@
                         <li>Web dashboard</li>
                         <li>Auto-remediation</li>
                     </ul>
-                    <button class="plan-cta" onclick="document.getElementById('email').focus()">Start Free Trial</button>
+                    <button class="plan-cta" onclick="document.getElementById('typeform-embed').scrollIntoView({behavior: 'smooth'})">Start Free Trial</button>
                 </div>
                 
                 <div class="pricing-card featured">
@@ -467,7 +439,7 @@
                         <li>Slack integration</li>
                         <li>Custom alerts</li>
                     </ul>
-                    <button class="plan-cta" onclick="document.getElementById('email').focus()">Start Free Trial</button>
+                    <button class="plan-cta" onclick="document.getElementById('typeform-embed').scrollIntoView({behavior: 'smooth'})">Start Free Trial</button>
                 </div>
                 
                 <div class="pricing-card">
@@ -482,20 +454,19 @@
                         <li>Dedicated account mgr</li>
                         <li>SLA guarantee</li>
                     </ul>
-                    <button class="plan-cta" onclick="document.getElementById('email').focus()">Contact Sales</button>
+                    <button class="plan-cta" onclick="document.getElementById('typeform-embed').scrollIntoView({behavior: 'smooth'})">Contact Sales</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
+    <!-- CTA Section with Typeform -->
     <section class="cta-section" id="cta">
         <h2>Ready to Simplify Container Management?</h2>
         <p>Join hundreds of DevOps engineers using ContainerGuard</p>
-        <form class="email-form" onsubmit="handleSubmit(event)">
-            <input type="email" id="email" placeholder="Enter your email" required>
-            <button type="submit">Get Started</button>
-        </form>
+        <div class="typeform-container" id="typeform-embed">
+            <div data-tf-live="01ARKZ9XFJ8ZRZWZ31Q2QM3QQS"></div>
+        </div>
         <p style="margin-top: 20px; font-size: 14px;">✅ 14-day free trial. No credit card required.</p>
     </section>
 
@@ -505,14 +476,7 @@
         <p>Built for DevOps Engineers | <a href="https://github.com/muralipala1504/linux-autonomous-agent" style="color: #667eea;">Open Source</a></p>
     </footer>
 
-    <script>
-        function handleSubmit(event) {
-            event.preventDefault();
-            const email = document.getElementById('email').value;
-            alert(`Thank you! We'll send early access details to ${email}`);
-            // TODO: Connect to backend to save email
-            document.getElementById('email').value = '';
-        }
-    </script>
+    <!-- Typeform Embed Script -->
+    <script src="//embed.typeform.com/next/embed.js"></script>
 </body>
 </html>
